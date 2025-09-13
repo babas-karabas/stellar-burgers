@@ -32,7 +32,6 @@ const App = () => {
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed'>
           <Route index element={<Feed />} />
-
           <Route path=':number' element={<OrderInfo />} />
         </Route>
         <Route
@@ -102,7 +101,7 @@ const App = () => {
           <Route
             path='/ingredients/:id'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
+              <Modal title='Детали ингредиента' onClose={() => navigate(-1)}>
                 <IngredientDetails />
               </Modal>
             }
