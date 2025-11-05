@@ -1,25 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TIngredient } from './../../utils/types';
-
+import { TOrder } from './../../utils/types';
 import { sendOrder } from '../actions/send-order';
 
 export interface TOrderState {
-  data: string[];
+  data: TOrder | null;
+  name: string;
   loading: boolean;
   error: Object;
 }
 
 const initialState: TOrderState = {
-  data: [],
+  data: null,
+  name: '',
   loading: false,
   error: {}
 };
-
-const isActionRejected = (action: { type: string }) =>
-  action.type.endsWith('rejected');
-
-const isActionPending = (action: { type: string }) =>
-  action.type.endsWith('pending');
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -28,26 +23,27 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(sendOrder.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.data = action.payload.order;
+        state.name = action.payload.name;
         state.loading = false;
       })
 
-      .addMatcher(isActionPending, (state) => {
+      .addCase(sendOrder.pending, (state) => {
         state.loading = true;
         state.error = '';
       })
 
-      .addMatcher(isActionRejected, (state, action) => {
+      .addCase(sendOrder.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? 'Unknown error';
+        state.error = 'Unknown error';
       });
   },
   selectors: {
-    getOrderCost: (state) => state.data.cost,
-   
+    getNewOrder: (state) => state.data,
+    getNewOrderName: (state) => state.name,
     getStatus: (state) => state.loading
   }
 });
 
-export const ingredientsActions = orderSlice.actions;
-export const { getOrderCost, getStatus } = orderSlice.selectors;
+export const newOrderActions = orderSlice.actions;
+export const { getNewOrderName, getStatus, getNewOrder } = orderSlice.selectors;

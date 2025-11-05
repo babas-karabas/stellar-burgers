@@ -6,7 +6,7 @@ import { loadFeeds } from '../actions/load-feeds';
 export interface TFeedsState {
   data: TOrdersData;
   loading: boolean;
-  error: Object;
+  error: string;
 }
 
 const initialState: TFeedsState = {
@@ -16,7 +16,7 @@ const initialState: TFeedsState = {
     totalToday: 0
   },
   loading: false,
-  error: {}
+  error: ''
 };
 
 const isActionRejected = (action: { type: string }) =>

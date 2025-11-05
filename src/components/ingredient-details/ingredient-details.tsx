@@ -7,8 +7,9 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
   const params = useParams();
-  const i = useSelector(getIngredients);
-  const ingredientData = i.find((ingredient) => ingredient._id === params.id);
+  const ingredientData = useSelector(getIngredients).find(
+    (ingredient) => ingredient._id === params.id
+  );
 
   if (!ingredientData) {
     return <Preloader />;

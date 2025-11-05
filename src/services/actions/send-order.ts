@@ -2,6 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { orderBurgerApi } from '@api';
 
 export const sendOrder = createAsyncThunk(
-  'ingredients/getIngredients',
+  'order/sendOrder',
   async (data: string[]) => orderBurgerApi(data)
 );
