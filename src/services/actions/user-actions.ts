@@ -53,11 +53,5 @@ export const updateUser = createAsyncThunk(
   async (
     { email, name, password }: Partial<TRegisterData>,
     { rejectWithValue }
-  ) => {
-    const res = await updateUserApi({ email, name, password });
-    if (!res) {
-      return rejectWithValue(data);
-    }
-    return data.user;
-  }
+  ) => await updateUserApi({ email, name, password })
 );

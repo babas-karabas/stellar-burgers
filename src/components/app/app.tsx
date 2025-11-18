@@ -83,7 +83,7 @@ const App = () => {
           <Route
             index
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onlyUnAuth={false}>
                 <Profile />
               </ProtectedRoute>
             }
@@ -91,7 +91,7 @@ const App = () => {
           <Route
             path='orders'
             element={
-              <ProtectedRoute>
+              <ProtectedRoute onlyUnAuth={false}>
                 <ProfileOrders />
               </ProtectedRoute>
             }

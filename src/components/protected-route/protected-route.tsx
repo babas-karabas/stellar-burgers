@@ -17,7 +17,7 @@ export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
     return <Preloader />;
   }
 
-  if (onlyUnAuth && !user) {
+  if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };
     const backgroundLocation = location.state?.from?.background || null;
     return (

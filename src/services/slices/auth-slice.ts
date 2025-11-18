@@ -59,12 +59,8 @@ export const authSlice = createSlice({
           state.user = action.payload;
         }
       )
-      .addCase(updateUser.fulfilled, (state, action: PayloadAction<TRegisterData>) => {
-        if (state.user) {
-          state.user.email = action.payload.email;
-          state.user.name = action.payload.name
-        };
-  
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.user = action.payload;
       });
   }
 });
