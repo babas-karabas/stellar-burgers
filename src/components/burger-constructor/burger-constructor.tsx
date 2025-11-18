@@ -8,7 +8,7 @@ import { useDispatch } from '../../services/store';
 import { sendOrder } from '../../services/actions/send-order';
 import { redirect, useNavigate } from 'react-router-dom';
 import { loadFeeds } from '../../services/actions/load-feeds';
-import { getUser } from '../../services/auth/auth-slice';
+import { getUser } from '../../services/slices/auth-slice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные orderRequest и orderModalData из стора */
@@ -23,7 +23,7 @@ export const BurgerConstructor: FC = () => {
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
     if (!user) {
-      redirect('/login');
+      navigate('/login');
     } else {
       dispatch(
         sendOrder([
@@ -31,7 +31,6 @@ export const BurgerConstructor: FC = () => {
           ...constructorItems.ingredients.map((ingredient) => ingredient._id)
         ])
       );
-      dispatch(loadFeeds());
     }
   };
   const closeOrderModal = () => navigate(-1);

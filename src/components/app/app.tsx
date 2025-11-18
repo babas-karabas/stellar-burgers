@@ -1,7 +1,13 @@
 import { ConstructorPage } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useParams,
+  useLocation
+} from 'react-router-dom';
 import { AppHeader } from '@components';
 import {
   Feed,
@@ -13,22 +19,29 @@ import {
   Profile,
   ProfileOrders
 } from '@pages';
-import {
-  Modal,
-  OrderInfo,
-  ProtectedRoute,
-  IngredientDetails
-} from '@components';
+import { Modal, OrderInfo, IngredientDetails } from '@components';
+
+import { ProtectedRoute } from '@components';
+import { useEffect } from 'react';
+import { getUserThunk } from '../../services/actions/user-actions';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   const navigate = useNavigate();
 
-  const background = useParams();
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const background = location.state?.background;
+
+  useEffect(() => {
+    dispatch(getUserThunk());
+  }, []);
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed'>
           <Route index element={<Feed />} />
@@ -37,7 +50,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -45,7 +58,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -53,7 +66,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -61,7 +74,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }

@@ -7,7 +7,7 @@ import {
 } from 'react-redux';
 
 import { ingredientsSlice } from './slices/ingredients-slice';
-import { authSlice } from './auth/auth-slice';
+import { authSlice } from './slices/auth-slice';
 import { constructorSlice } from './slices/constructor-slice';
 import { feedsSlice } from './slices/feeds-slice';
 import { orderSlice } from './slices/order-slice';

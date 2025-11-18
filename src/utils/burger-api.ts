@@ -131,9 +131,7 @@ export const getOrderByNumberApi = (number: number) =>
     }
   }).then((res) => checkResponse<TOrderResponse>(res));
 
-export type TRegisterData = {
-  email: string;
-  name: string;
+export type TRegisterData = TUser & {
   password: string;
 };
 
@@ -213,7 +211,7 @@ export const getUserApi = () =>
     } as HeadersInit
   });
 
-export const updateUserApi = (user: Partial<TRegisterData>) =>
+export const updateUserApi = (user: Partial<TRegisterData>) => {
   fetchWithRefresh<TUserResponse>(`${URL}/auth/user`, {
     method: 'PATCH',
     headers: {
@@ -222,6 +220,7 @@ export const updateUserApi = (user: Partial<TRegisterData>) =>
     } as HeadersInit,
     body: JSON.stringify(user)
   });
+}
 
 export const logoutApi = () =>
   fetch(`${URL}/auth/logout`, {

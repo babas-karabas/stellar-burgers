@@ -1,24 +1,23 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from '../../services/store';
 import { Navigate, useLocation } from 'react-router-dom';
-
-//import { userSelectors } from '../../services/slices/user';
-import { Preloader } from '@ui';
+import { getUser, getIsAuthChecked } from '../../services/slices/auth-slice';
+import { Preloader } from '../ui';
 
 type ProtectedRouteProps = {
-  onlyAuth?: boolean;
+  onlyUnAuth?: boolean;
   children: React.ReactNode;
 };
 
-export const ProtectedRoute = ({ children, onlyAuth }: ProtectedRouteProps) => {
+export function ProtectedRoute({ children, onlyUnAuth }: ProtectedRouteProps) {
   const location = useLocation();
-  //const user = useSelector(userSelectors.getUser);
-  //const isAuthChecked = useSelector(userSelectors.getIsAuthChecked);
+  const isAuthChecked = useSelector(getIsAuthChecked);
+  const user = useSelector(getUser);
 
   if (!isAuthChecked) {
     return <Preloader />;
   }
 
-  if (!onlyAuth && user) {
+  if (onlyUnAuth && !user) {
     const from = location.state?.from || { pathname: '/' };
     const backgroundLocation = location.state?.from?.background || null;
     return (
@@ -26,7 +25,7 @@ export const ProtectedRoute = ({ children, onlyAuth }: ProtectedRouteProps) => {
     );
   }
 
-  if (onlyAuth && !user) {
+  if (!onlyUnAuth && !user) {
     return (
       <Navigate
         replace
@@ -41,6 +40,5 @@ export const ProtectedRoute = ({ children, onlyAuth }: ProtectedRouteProps) => {
       />
     );
   }
-
   return children;
-};
+}
