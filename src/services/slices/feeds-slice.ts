@@ -1,22 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrder, TOrdersData } from './../../utils/types';
 
-import { loadFeeds } from '../actions/load-feeds';
+import {
+  loadFeeds,
+  loadOrders,
+  loadOrderByNumber
+} from '../actions/load-feeds';
 
 export interface TFeedsState {
-  data: TOrdersData;
+  feeds: TOrdersData;
   loading: boolean;
-  error: string;
+  error: string | null;
+  userOrders: TOrder[];
+  orderForModal: TOrder | null;
 }
 
 const initialState: TFeedsState = {
-  data: {
+  feeds: {
     orders: [],
     total: 0,
     totalToday: 0
   },
   loading: false,
-  error: ''
+  error: null,
+  userOrders: [],
+  orderForModal: null
 };
 
 const isActionRejected = (action: { type: string }) =>
@@ -28,32 +36,59 @@ const isActionPending = (action: { type: string }) =>
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
-  reducers: {},
+  reducers: {
+    clearOrderByNumber: (state) => {
+      state.orderForModal = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(loadFeeds.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.loading = false;
-      })
-
+      .addCase(
+        loadFeeds.fulfilled,
+        (state, action: PayloadAction<TOrdersData>) => {
+          state.loading = false;
+          state.feeds = action.payload;
+        }
+      )
+      .addCase(
+        loadOrders.fulfilled,
+        (state, action: PayloadAction<TOrder[]>) => {
+          state.userOrders = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(
+        loadOrderByNumber.fulfilled,
+        (state, action: PayloadAction<TOrder>) => {
+          state.loading = false;
+          state.orderForModal = action.payload;
+        }
+      )
       .addMatcher(isActionPending, (state) => {
         state.loading = true;
-        state.error = '';
+        state.error = null;
       })
-
       .addMatcher(isActionRejected, (state, action) => {
         state.loading = false;
-        state.error = 'Unknown error';
+        state.error = `Error of ${action.type}`;
       });
   },
   selectors: {
-    getFeeds: (state) => state.data.orders,
-    getTotal: (state) => state.data.total,
-    getTotalToday: (state) => state.data.totalToday,
-    getStatus: (state) => state.loading
+    getFeeds: (state) => state.feeds.orders,
+    getTotal: (state) => state.feeds.total,
+    getTotalToday: (state) => state.feeds.totalToday,
+    getStatus: (state) => state.loading,
+    getOrders: (state) => state.userOrders,
+    getOrderByNumber: (state) => state.orderForModal
   }
 });
 
-export const feedsActions = feedsSlice.actions;
-export const { getFeeds, getStatus, getTotal, getTotalToday } =
-  feedsSlice.selectors;
+export const { clearOrderByNumber } = feedsSlice.actions;
+export const {
+  getFeeds,
+  getStatus,
+  getTotal,
+  getTotalToday,
+  getOrders,
+  getOrderByNumber
+} = feedsSlice.selectors;

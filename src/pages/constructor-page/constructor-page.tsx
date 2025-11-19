@@ -8,10 +8,7 @@ import { Preloader } from '../../components/ui';
 import { FC } from 'react';
 import { useDispatch } from '../../services/store';
 import { useEffect } from 'react';
-import {
-  getIngredients,
-  getStatus
-} from '../../services/slices/ingredients-slice';
+import { getStatus } from '../../services/slices/ingredients-slice';
 
 export const ConstructorPage: FC = () => {
   /** TODO: взять переменную из стора */

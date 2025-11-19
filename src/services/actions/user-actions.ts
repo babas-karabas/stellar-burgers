@@ -4,7 +4,8 @@ import {
   loginUserApi,
   getUserApi,
   registerUserApi,
-  updateUserApi
+  updateUserApi,
+  logoutApi
 } from '@api';
 import { setCookie } from '../../utils/cookie';
 
@@ -53,5 +54,24 @@ export const updateUser = createAsyncThunk(
   async (
     { email, name, password }: Partial<TRegisterData>,
     { rejectWithValue }
-  ) => await updateUserApi({ email, name, password })
+  ) => {
+    const data = await updateUserApi({ email, name, password });
+    if (!data?.success) {
+      return rejectWithValue(data);
+    }
+    return data.user;
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  'user/logoutUser',
+  async (__, { rejectWithValue }) => {
+    const data = await logoutApi();
+    if (!data?.success) {
+      return rejectWithValue(data);
+    }
+    localStorage.setItem('refreshToken', '');
+    setCookie('accessToken', '');
+    return data.success;
+  }
 );

@@ -4,9 +4,9 @@ import {
   loginUser,
   getUserThunk,
   registerUser,
-  updateUser
+  updateUser,
+  logoutUser
 } from '../actions/user-actions';
-import { TRegisterData } from '@api';
 
 interface TUserState {
   isAuthChecked: boolean;
@@ -28,7 +28,7 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action) => {
+    setUser: (state, action: PayloadAction<TUser>) => {
       state.user = action.payload;
     }
   },
@@ -45,22 +45,32 @@ export const authSlice = createSlice({
       .addCase(getUserThunk.rejected, (state) => {
         state.isAuthChecked = true;
       })
-      .addCase(getUserThunk.fulfilled, (state, action) => {
-        state.isAuthenticated = true;
-        state.user = action.payload;
-      })
+      .addCase(
+        getUserThunk.fulfilled,
+        (state, action: PayloadAction<TUser>) => {
+          state.isAuthenticated = true;
+          state.user = action.payload;
+        }
+      )
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<TUser>) => {
         state.loginUserError = null;
         state.user = action.payload;
+        state.isAuthenticated = true;
+        state.isAuthChecked = true;
       })
       .addCase(
         registerUser.fulfilled,
         (state, action: PayloadAction<TUser>) => {
           state.user = action.payload;
+          state.isAuthenticated = true;
         }
       )
-      .addCase(updateUser.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, action: PayloadAction<TUser>) => {
         state.user = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.user = null;
       });
   }
 });

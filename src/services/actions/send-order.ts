@@ -3,5 +3,11 @@ import { orderBurgerApi } from '@api';
 
 export const sendOrder = createAsyncThunk(
   'order/sendOrder',
-  async (data: string[]) => orderBurgerApi(data)
+  async (data: string[], { rejectWithValue }) => {
+    const res = await orderBurgerApi(data);
+    if (!res?.success) {
+      return rejectWithValue(data);
+    }
+    return res.order;
+  }
 );

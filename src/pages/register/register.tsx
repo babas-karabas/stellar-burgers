@@ -12,6 +12,7 @@ export const Register: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+
     if (!email || !password || !userName) {
       return;
     }

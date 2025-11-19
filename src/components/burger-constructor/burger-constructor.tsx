@@ -3,11 +3,14 @@ import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector } from '../../services/store';
 import { getConstructor } from '../../services/slices/constructor-slice';
-import { getNewOrder, getStatus } from '../../services/slices/order-slice';
+import {
+  getNewOrder,
+  getStatus,
+  clearOrderConstructor
+} from '../../services/slices/order-slice';
 import { useDispatch } from '../../services/store';
 import { sendOrder } from '../../services/actions/send-order';
-import { redirect, useNavigate } from 'react-router-dom';
-import { loadFeeds } from '../../services/actions/load-feeds';
+import { useNavigate } from 'react-router-dom';
 import { getUser } from '../../services/slices/auth-slice';
 
 export const BurgerConstructor: FC = () => {
