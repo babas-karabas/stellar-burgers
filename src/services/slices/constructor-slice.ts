@@ -34,11 +34,14 @@ export const constructorSlice = createSlice({
       }
     },
 
-    deleteIngredient: (state, action) => {
-      state.ingredients.filter(
-        (ingredient) => ingredient.id !== action.payload
-      );
+    deleteIngredient: (state, action: PayloadAction<string>) => {
+      state.ingredients = [
+        ...state.ingredients.filter(
+          (ingredient) => ingredient.id !== action.payload
+        )
+      ];
     },
+
     moveIngredient: (state, action) => {
       state.ingredients.splice(
         action.payload.to,

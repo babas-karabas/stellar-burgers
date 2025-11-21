@@ -6,9 +6,7 @@ export const loadFeeds = createAsyncThunk('feeds/getFeeds', async () => {
   return { orders, total, totalToday };
 });
 
-export const loadOrders = createAsyncThunk('feeds/getOrders', async () =>
-  getOrdersApi()
-);
+export const loadOrders = createAsyncThunk('feeds/getOrders', getOrdersApi);
 
 export const loadOrderByNumber = createAsyncThunk(
   'feeds/loadOrderByNumber',

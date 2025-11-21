@@ -10,6 +10,7 @@ import { useDispatch } from '../../services/store';
 export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = memo(
   ({ ingredient, index, totalItems }) => {
     const dispatch = useDispatch();
+
     const handleMoveDown = () => {
       dispatch(moveIngredient({ from: index, to: index + 1 }));
     };

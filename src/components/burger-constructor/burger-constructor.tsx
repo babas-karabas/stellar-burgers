@@ -5,12 +5,12 @@ import { useSelector } from '../../services/store';
 import { getConstructor } from '../../services/slices/constructor-slice';
 import {
   getNewOrder,
-  getStatus,
+  getOrderStatus,
   clearOrderConstructor
 } from '../../services/slices/order-slice';
 import { useDispatch } from '../../services/store';
 import { sendOrder } from '../../services/actions/send-order';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { getUser } from '../../services/slices/auth-slice';
 
 export const BurgerConstructor: FC = () => {
@@ -19,7 +19,7 @@ export const BurgerConstructor: FC = () => {
   const navigate = useNavigate();
   const constructorItems = useSelector(getConstructor);
   const user = useSelector(getUser);
-  const orderRequest = useSelector(getStatus);
+  const orderRequest = useSelector(getOrderStatus);
 
   const orderModalData = useSelector(getNewOrder);
 
@@ -34,8 +34,10 @@ export const BurgerConstructor: FC = () => {
           ...constructorItems.ingredients.map((ingredient) => ingredient._id)
         ])
       );
+      return () => dispatch(clearOrderConstructor());
     }
   };
+
   const closeOrderModal = () => navigate(-1);
 
   const price = useMemo(

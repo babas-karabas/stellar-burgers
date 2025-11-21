@@ -25,6 +25,8 @@ import { ProtectedRoute } from '@components';
 import { useEffect } from 'react';
 import { getUserThunk } from '../../services/actions/user-actions';
 import { useDispatch } from '../../services/store';
+import { loadIngredients } from '../../services/actions/load-ingredients';
+import { loadFeeds } from '../../services/actions/load-feeds';
 
 const App = () => {
   const navigate = useNavigate();
@@ -36,6 +38,12 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getUserThunk());
+  }, []);
+  useEffect(() => {
+    dispatch(loadIngredients());
+  }, []);
+  useEffect(() => {
+    dispatch(loadFeeds());
   }, []);
 
   return (
@@ -53,6 +61,17 @@ const App = () => {
             <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/ingredients/:id'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p className={`text text_type_main-large ${styles.detailHeader}`}>
+                Детали ингредиента
+              </p>
+              <IngredientDetails />
+            </div>
           }
         />
         <Route
@@ -88,16 +107,25 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path='orders'
-            element={
-              <ProtectedRoute onlyUnAuth={false}>
-                <ProfileOrders />
-              </ProtectedRoute>
-            }
-          />
+          <Route path='orders'>
+            <Route
+              index
+              element={
+                <ProtectedRoute onlyUnAuth={false}>
+                  <ProfileOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path=':number'
+              element={
+                <ProtectedRoute onlyUnAuth={false}>
+                  <OrderInfo />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
         </Route>
-
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
@@ -122,9 +150,11 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='' onClose={() => navigate(-1)}>
-                <OrderInfo />
-              </Modal>
+              <ProtectedRoute onlyUnAuth={false}>
+                <Modal title='' onClose={() => navigate(-1)}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>

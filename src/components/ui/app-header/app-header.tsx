@@ -18,7 +18,6 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.link_active : ''}`
           }
-          end
         >
           {({ isActive }) => (
             <>
