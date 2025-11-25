@@ -24,12 +24,26 @@ const initialState: TUserState = {
   loginUserRequest: false
 };
 
+const isRejected = (action: { type: string }) =>
+  action.type.endsWith('rejected');
+
+const isPending = (action: { type: string }) => action.type.endsWith('pending');
+
+const hasPrefix = (action: { type: string }, prefix: string) =>
+  action.type.startsWith(prefix);
+
+const isPendingAction = (prefix: string) => (action: { type: string }) =>
+  hasPrefix(action, prefix) && isPending(action);
+
+const isRejectedAction = (prefix: string) => (action: { type: string }) =>
+  hasPrefix(action, prefix) && isRejected(action);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<TUser>) => {
-      state.user = action.payload;
+    setIsAuthChecked: (state) => {
+      state.isAuthChecked = true;
     }
   },
   selectors: {
@@ -39,12 +53,6 @@ export const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUserThunk.pending, (state) => {
-        state.isAuthChecked = true;
-      })
-      .addCase(getUserThunk.rejected, (state) => {
-        state.isAuthChecked = true;
-      })
       .addCase(
         getUserThunk.fulfilled,
         (state, action: PayloadAction<TUser>) => {
@@ -56,7 +64,6 @@ export const authSlice = createSlice({
         state.loginUserError = null;
         state.user = action.payload;
         state.isAuthenticated = true;
-        state.isAuthChecked = true;
       })
       .addCase(
         registerUser.fulfilled,
@@ -71,10 +78,18 @@ export const authSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.user = null;
+      })
+      .addMatcher(isPendingAction('auth'), (state) => {
+        state.loginUserRequest = true;
+        state.loginUserError = null;
+      })
+      .addMatcher(isRejectedAction('auth'), (state, action) => {
+        state.loginUserRequest = false;
+        state.loginUserError = `Error of ${action.type}`;
       });
   }
 });
 
-export const { setUser } = authSlice.actions;
+export const { setIsAuthChecked } = authSlice.actions;
 export const { getUser, getIsAuthChecked, getIsAuthenticated } =
   authSlice.selectors;

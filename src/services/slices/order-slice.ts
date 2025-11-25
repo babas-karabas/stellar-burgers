@@ -18,7 +18,7 @@ export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    clearOrderConstructor: (state) => {
+    clearOrderData: (state) => {
       state.data = null;
     }
   },
@@ -47,4 +47,4 @@ export const orderSlice = createSlice({
 
 export const { getNewOrderName, getOrderStatus, getNewOrder } =
   orderSlice.selectors;
-export const { clearOrderConstructor } = orderSlice.actions;
+export const { clearOrderData } = orderSlice.actions;

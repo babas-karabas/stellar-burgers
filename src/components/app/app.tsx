@@ -23,10 +23,9 @@ import { Modal, OrderInfo, IngredientDetails } from '@components';
 
 import { ProtectedRoute } from '@components';
 import { useEffect } from 'react';
-import { getUserThunk } from '../../services/actions/user-actions';
+import { checkUserAuth } from '../../services/actions/user-actions';
 import { useDispatch } from '../../services/store';
 import { loadIngredients } from '../../services/actions/load-ingredients';
-import { loadFeeds } from '../../services/actions/load-feeds';
 
 const App = () => {
   const navigate = useNavigate();
@@ -37,13 +36,8 @@ const App = () => {
   const background = location.state?.background;
 
   useEffect(() => {
-    dispatch(getUserThunk());
-  }, []);
-  useEffect(() => {
+    dispatch(checkUserAuth());
     dispatch(loadIngredients());
-  }, []);
-  useEffect(() => {
-    dispatch(loadFeeds());
   }, []);
 
   return (

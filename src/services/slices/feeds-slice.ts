@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, isAction, PayloadAction, Slice } from '@reduxjs/toolkit';
 import { TOrder, TOrdersData } from './../../utils/types';
 
 import {
@@ -27,11 +27,19 @@ const initialState: TFeedsState = {
   orderForModal: null
 };
 
-const isActionRejected = (action: { type: string }) =>
+const isRejected = (action: { type: string }) =>
   action.type.endsWith('rejected');
 
-const isActionPending = (action: { type: string }) =>
-  action.type.endsWith('pending');
+const isPending = (action: { type: string }) => action.type.endsWith('pending');
+
+const hasPrefix = (action: { type: string }, prefix: string) =>
+  action.type.startsWith(prefix);
+
+const isPendingAction = (prefix: string) => (action: { type: string }) =>
+  hasPrefix(action, prefix) && isPending(action);
+
+const isRejectedAction = (prefix: string) => (action: { type: string }) =>
+  hasPrefix(action, prefix) && isRejected(action);
 
 export const feedsSlice = createSlice({
   name: 'feeds',
@@ -64,11 +72,11 @@ export const feedsSlice = createSlice({
           state.orderForModal = action.payload;
         }
       )
-      .addMatcher(isActionPending, (state) => {
+      .addMatcher(isPendingAction('feeds'), (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addMatcher(isActionRejected, (state, action) => {
+      .addMatcher(isRejectedAction('feeds'), (state, action) => {
         state.loading = false;
         state.error = `Error of ${action.type}`;
       });

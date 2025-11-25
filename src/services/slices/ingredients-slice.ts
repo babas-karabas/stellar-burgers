@@ -15,12 +15,6 @@ const initialState: TIngredientsState = {
   error: null
 };
 
-const isActionRejected = (action: { type: string }) =>
-  action.type.endsWith('rejected');
-
-const isActionPending = (action: { type: string }) =>
-  action.type.endsWith('pending');
-
 export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
@@ -32,12 +26,12 @@ export const ingredientsSlice = createSlice({
         state.loading = false;
       })
 
-      .addMatcher(isActionPending, (state) => {
+      .addCase(loadIngredients.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
 
-      .addMatcher(isActionRejected, (state, action) => {
+      .addCase(loadIngredients.rejected, (state, action) => {
         state.loading = false;
         state.error = `Error of ${action.type}`;
       });
@@ -50,10 +44,15 @@ export const ingredientsSlice = createSlice({
       state.data.filter((ingredient) => ingredient.type === 'sauce'),
     getMains: (state) =>
       state.data.filter((ingredient) => ingredient.type === 'main'),
-    getStatus: (state) => state.loading
+    getIngredientsStatus: (state) => state.loading
   }
 });
 
 export const ingredientsActions = ingredientsSlice.actions;
-export const { getIngredients, getStatus, getBuns, getSauces, getMains } =
-  ingredientsSlice.selectors;
+export const {
+  getIngredients,
+  getIngredientsStatus,
+  getBuns,
+  getSauces,
+  getMains
+} = ingredientsSlice.selectors;

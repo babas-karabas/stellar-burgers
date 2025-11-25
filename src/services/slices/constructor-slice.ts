@@ -2,20 +2,14 @@ import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from './../../utils/types';
 
 export interface TConstructorState {
-  bun: TIngredient | undefined;
+  bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
 }
 
 const initialState: TConstructorState = {
-  bun: undefined,
+  bun: null,
   ingredients: []
 };
-
-const isActionRejected = (action: { type: string }) =>
-  action.type.endsWith('rejected');
-
-const isActionPending = (action: { type: string }) =>
-  action.type.endsWith('pending');
 
 export const constructorSlice = createSlice({
   name: 'burgerConstructor',
@@ -32,6 +26,10 @@ export const constructorSlice = createSlice({
         const id = nanoid();
         return { payload: { ...ingredient, id } };
       }
+    },
+    clearConstructor: (state) => {
+      state.bun = null;
+      state.ingredients = [];
     },
 
     deleteIngredient: (state, action: PayloadAction<string>) => {
@@ -55,6 +53,11 @@ export const constructorSlice = createSlice({
   }
 });
 
-export const { setBun, setOtherIngredients, deleteIngredient, moveIngredient } =
-  constructorSlice.actions;
+export const {
+  setBun,
+  setOtherIngredients,
+  deleteIngredient,
+  moveIngredient,
+  clearConstructor
+} = constructorSlice.actions;
 export const { getConstructor } = constructorSlice.selectors;
