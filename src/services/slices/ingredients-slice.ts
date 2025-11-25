@@ -38,21 +38,10 @@ export const ingredientsSlice = createSlice({
   },
   selectors: {
     getIngredients: (state) => state.data,
-    getBuns: (state) =>
-      state.data.filter((ingredient) => ingredient.type === 'bun'),
-    getSauces: (state) =>
-      state.data.filter((ingredient) => ingredient.type === 'sauce'),
-    getMains: (state) =>
-      state.data.filter((ingredient) => ingredient.type === 'main'),
     getIngredientsStatus: (state) => state.loading
   }
 });
 
 export const ingredientsActions = ingredientsSlice.actions;
-export const {
-  getIngredients,
-  getIngredientsStatus,
-  getBuns,
-  getSauces,
-  getMains
-} = ingredientsSlice.selectors;
+export const { getIngredients, getIngredientsStatus } =
+  ingredientsSlice.selectors;

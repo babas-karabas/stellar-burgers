@@ -13,7 +13,7 @@ import {
 } from '../../services/slices/order-slice';
 import { useDispatch } from '../../services/store';
 import { sendOrder } from '../../services/actions/send-order';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getUser } from '../../services/slices/auth-slice';
 
 export const BurgerConstructor: FC = () => {
