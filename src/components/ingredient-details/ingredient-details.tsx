@@ -1,10 +1,15 @@
 import { FC } from 'react';
 import { Preloader } from '../ui/preloader';
 import { IngredientDetailsUI } from '../ui/ingredient-details';
+import { useSelector } from '../../services/store';
+import { getIngredients } from '../../services/slices/ingredients-slice';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 export const IngredientDetails: FC = () => {
-  /** TODO: взять переменную из стора */
-  const ingredientData = null;
+  const params = useParams();
+  const ingredientData = useSelector(getIngredients).find(
+    (ingredient) => ingredient._id === params.id
+  );
 
   if (!ingredientData) {
     return <Preloader />;
