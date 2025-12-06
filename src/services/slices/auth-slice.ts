@@ -8,7 +8,7 @@ import {
   logoutUser
 } from '../actions/user-actions';
 
-interface TUserState {
+export interface TUserState {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
@@ -93,3 +93,4 @@ export const authSlice = createSlice({
 export const { setIsAuthChecked } = authSlice.actions;
 export const { getUser, getIsAuthChecked, getIsAuthenticated } =
   authSlice.selectors;
+export const authReducer = authSlice.reducer;
