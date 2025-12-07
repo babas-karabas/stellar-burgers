@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDispatch } from '../../services/store';
+import { useDispatch } from '../../services/store/store';
 import {
   setBun,
   setOtherIngredients

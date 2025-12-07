@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for services/actions/load-feeds.ts</title>
+    <title>Code coverage report for services/actions/send-order.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">services/actions</a> load-feeds.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">services/actions</a> send-order.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.58% </span>
+                <span class="strong">53.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/17</span>
+                <span class='fraction'>7/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.58% </span>
+                <span class="strong">53.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/17</span>
+                <span class='fraction'>7/13</span>
             </div>
         
             
@@ -76,42 +76,30 @@
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L14'></a><a href='#L14'>14</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi, getOrdersApi, getOrderByNumberApi } from '../../utils/burger-api';
+import { orderBurgerApi } from '../../utils/burger-api';
 &nbsp;
-export const loadFeeds = createAsyncThunk('feeds/getFeeds', async () =&gt; {
-<span class="cstat-no" title="statement not covered" >  const { orders, total, totalToday } = await getFeedsApi();</span>
-<span class="cstat-no" title="statement not covered" >  return { orders, total, totalToday };</span>
-});
-&nbsp;
-export const loadOrders = createAsyncThunk('feeds/getOrders', getOrdersApi);
-&nbsp;
-export const loadOrderByNumber = createAsyncThunk(
-  'feeds/loadOrderByNumber',
-  async (data: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >    const res = await getOrderByNumberApi(data);</span>
-<span class="cstat-no" title="statement not covered" >    return res.orders[0];</span>
+export const sendOrder = createAsyncThunk(
+  'order/sendOrder',
+  async (data: string[], { rejectWithValue }) =&gt; {
+<span class="cstat-no" title="statement not covered" >    const res = await orderBurgerApi(data);</span>
+<span class="cstat-no" title="statement not covered" >    if (!res?.success) {</span>
+<span class="cstat-no" title="statement not covered" >      return rejectWithValue(data);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    return res.order;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 );
 &nbsp;</pre></td></tr></table></pre>

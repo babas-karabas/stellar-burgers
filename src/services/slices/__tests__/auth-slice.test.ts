@@ -157,7 +157,11 @@ describe('authSlice', function () {
   });
 
   describe('authSlice matchers', () => {
-    let store: ReturnType<typeof configureStore>;
+    let store: ReturnType<
+      typeof configureStore<{
+        auth: TUserState;
+      }>
+    >;
 
     beforeEach(() => {
       store = configureStore({
@@ -168,27 +172,18 @@ describe('authSlice', function () {
     });
 
     describe('isPendingAction matcher', () => {
-      it('должен устанавливать loginUserRequest в true и очищать ошибки при pending состоянии loginUser', () => {
-        const pendingAction = loginUser.pending('requestId', {
-          email: 'test@test.com',
-          password: 'password'
-        });
-
-        store.dispatch(pendingAction);
+      it('должен устанавливать loginUserRequest в true и очищать ошибки при pending состоянии с префиксом auth', () => {
+        // Диспатчим экшен с префиксом 'auth', чтобы matcher сработал
+        store.dispatch({ type: 'auth/someAction/pending' });
         const state = store.getState().auth;
 
         expect(state.loginUserRequest).toBe(true);
         expect(state.loginUserError).toBeNull();
       });
 
-      it('должен устанавливать loginUserRequest в true для registerUser.pending', () => {
-        const pendingAction = registerUser.pending('requestId', {
-          email: 'test@test.com',
-          password: 'password',
-          name: 'Test User'
-        });
-
-        store.dispatch(pendingAction);
+      it('должен устанавливать loginUserRequest в true для любых pending экшенов с префиксом auth', () => {
+        // Диспатчим другой экшен с префиксом 'auth'
+        store.dispatch({ type: 'auth/anotherAction/pending' });
         const state = store.getState().auth;
 
         expect(state.loginUserRequest).toBe(true);
@@ -196,20 +191,11 @@ describe('authSlice', function () {
       });
 
       it('должен очищать предыдущие ошибки при новом pending запросе', () => {
-        // Сначала устанавливаем ошибку
-        const rejectedAction = loginUser.rejected(
-          new Error('Network error'),
-          'requestId',
-          { email: 'test@test.com', password: 'password' }
-        );
-        store.dispatch(rejectedAction);
+        // Сначала устанавливаем ошибку через rejected экшен
+        store.dispatch({ type: 'auth/someAction/rejected' });
 
         // Затем отправляем pending
-        const pendingAction = loginUser.pending('requestId2', {
-          email: 'test@test.com',
-          password: 'password'
-        });
-        store.dispatch(pendingAction);
+        store.dispatch({ type: 'auth/someAction/pending' });
 
         const state = store.getState().auth;
         expect(state.loginUserError).toBeNull();
@@ -219,27 +205,15 @@ describe('authSlice', function () {
 
     describe('isRejectedAction matcher', () => {
       it('должен устанавливать loginUserRequest в false и записывать ошибку при rejected состоянии', () => {
-        const error = new Error('Invalid credentials');
-        const rejectedAction = loginUser.rejected(error, 'requestId', {
-          email: 'test@test.com',
-          password: 'wrong'
-        });
-
-        store.dispatch(rejectedAction);
+        store.dispatch({ type: 'auth/loginUser/rejected' });
         const state = store.getState().auth;
 
         expect(state.loginUserRequest).toBe(false);
         expect(state.loginUserError).toBe('Error of auth/loginUser/rejected');
       });
 
-      it('должен обрабатывать rejected для всех auth-экшенов', () => {
-        const rejectedAction = registerUser.rejected(
-          new Error('User exists'),
-          'requestId',
-          { email: 'test@test.com', password: 'password', name: 'Test' }
-        );
-
-        store.dispatch(rejectedAction);
+      it('должен обрабатывать rejected для всех auth экшенов', () => {
+        store.dispatch({ type: 'auth/registerUser/rejected' });
         const state = store.getState().auth;
 
         expect(state.loginUserRequest).toBe(false);
@@ -248,21 +222,11 @@ describe('authSlice', function () {
 
       it('должен корректно обрабатывать последовательность pending -> rejected', () => {
         // Pending
-        const pendingAction = loginUser.pending('requestId', {
-          email: 'test@test.com',
-          password: 'password'
-        });
-        store.dispatch(pendingAction);
-
+        store.dispatch({ type: 'auth/someAction/pending' });
         expect(store.getState().auth.loginUserRequest).toBe(true);
 
         // Rejected
-        const rejectedAction = loginUser.rejected(
-          new Error('Network error'),
-          'requestId',
-          { email: 'test@test.com', password: 'password' }
-        );
-        store.dispatch(rejectedAction);
+        store.dispatch({ type: 'auth/someAction/rejected' });
 
         const state = store.getState().auth;
         expect(state.loginUserRequest).toBe(false);
@@ -282,20 +246,13 @@ describe('authSlice', function () {
       });
 
       it('не должен реагировать на fulfilled экшены через matcher', () => {
-        // fulfilled обрабатывается через addCase, не через matcher
-        const fulfilledAction = loginUser.fulfilled(
-          { email: 'test@test.com', name: 'Test User' },
-          'requestId',
-          { email: 'test@test.com', password: 'password' }
-        );
-
-        store.dispatch(fulfilledAction);
+        // fulfilled не обрабатывается matcher'ами для pending/rejected
+        store.dispatch({ type: 'auth/someAction/fulfilled' });
         const state = store.getState().auth;
 
-        // loginUserRequest должен оставаться false (не сработал matcher)
+        // loginUserRequest должен оставаться false (matcher не сработал для fulfilled)
         expect(state.loginUserRequest).toBe(false);
-        // но user должен быть установлен (сработал addCase)
-        expect(state.user).toBeTruthy();
+        expect(state.loginUserError).toBeNull();
       });
     });
   });

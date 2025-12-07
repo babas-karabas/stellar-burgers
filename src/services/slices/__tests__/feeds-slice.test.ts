@@ -4,6 +4,7 @@ import {
   loadOrders,
   loadOrderByNumber
 } from '../../actions/load-feeds';
+import { configureStore } from '@reduxjs/toolkit';
 
 describe('feedsSlice', function () {
   const initialState: TFeedsState = {
@@ -99,5 +100,106 @@ describe('feedsSlice', function () {
     );
 
     expect(actualState).toEqual(expectedState);
+  });
+
+  describe('feedsSlice matchers', () => {
+    let store: ReturnType<
+      typeof configureStore<{
+        feeds: TFeedsState;
+      }>
+    >;
+
+    beforeEach(() => {
+      store = configureStore({
+        reducer: {
+          feeds: feedsReducer
+        }
+      });
+    });
+
+    describe('isPendingAction matcher', () => {
+      it('должен устанавливать loading в true и очищать ошибки при pending состоянии с префиксом feeds', () => {
+        // Диспатчим экшен с префиксом 'feeds', чтобы matcher сработал
+        store.dispatch({ type: 'feeds/someAction/pending' });
+        const state = store.getState().feeds;
+
+        expect(state.loading).toBe(true);
+        expect(state.error).toBeNull();
+      });
+
+      it('должен устанавливать loading в true для любых pending экшенов с префиксом feeds', () => {
+        // Диспатчим другой экшен с префиксом 'auth'
+        store.dispatch({ type: 'feeds/anotherAction/pending' });
+        const state = store.getState().feeds;
+
+        expect(state.loading).toBe(true);
+        expect(state.error).toBeNull();
+      });
+
+      it('должен очищать предыдущие ошибки при новом pending запросе', () => {
+        // Сначала устанавливаем ошибку через rejected экшен
+        store.dispatch({ type: 'feeds/someAction/rejected' });
+
+        // Затем отправляем pending
+        store.dispatch({ type: 'feeds/someAction/pending' });
+
+        const state = store.getState().feeds;
+        expect(state.error).toBeNull();
+        expect(state.loading).toBe(true);
+      });
+    });
+
+    describe('isRejectedAction matcher', () => {
+      it('должен устанавливать loading в false и записывать ошибку при rejected состоянии', () => {
+        store.dispatch({ type: 'feeds/loadOrders/rejected' });
+        const state = store.getState().feeds;
+
+        expect(state.loading).toBe(false);
+        expect(state.error).toBe('Error of feeds/loadOrders/rejected');
+      });
+
+      it('должен обрабатывать rejected для всех feeds экшенов', () => {
+        store.dispatch({ type: 'feeds/loadOrderByNumber/rejected' });
+        const state = store.getState().feeds;
+
+        expect(state.loading).toBe(false);
+        expect(state.error).toContain('feeds/loadOrderByNumber/rejected');
+      });
+
+      it('должен корректно обрабатывать последовательность pending -> rejected', () => {
+        // Pending
+        store.dispatch({ type: 'feeds/someAction/pending' });
+        expect(store.getState().feeds.loading).toBe(true);
+
+        // Rejected
+        store.dispatch({ type: 'feeds/someAction/rejected' });
+
+        const state = store.getState().feeds;
+        expect(state.loading).toBe(false);
+        expect(state.error).toBeTruthy();
+      });
+    });
+
+    describe('matcher не должен срабатывать на посторонние экшены', () => {
+      it('не должен реагировать на экшены не из feeds prefix', () => {
+        const initialState = store.getState().feeds;
+
+        // Диспатчим экшен с другим префиксом
+        store.dispatch({ type: 'orders/fetchOrders/pending' });
+
+        const state = store.getState().feeds;
+        expect(state).toEqual(initialState);
+      });
+
+      it('не должен реагировать на fulfilled экшены через matcher', () => {
+        // fulfilled не обрабатывается matcher'ами для pending/rejected
+        store.dispatch({ type: 'feeds/someAction/fulfilled' });
+        const state = store.getState().feeds;
+
+        // loginUserRequest должен оставаться false (matcher не сработал для fulfilled)
+        expect(state.loading).toBe(false);
+        expect(state.error).toBeNull();
+      });
+    });
   });
 });

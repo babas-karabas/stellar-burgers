@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
-import { useSelector } from '../../services/store';
+import { useSelector } from '../../services/store/store';
 import {
   getConstructor,
   clearConstructor
@@ -11,7 +11,7 @@ import {
   getNewOrder,
   getOrderStatus
 } from '../../services/slices/order-slice';
-import { useDispatch } from '../../services/store';
+import { useDispatch } from '../../services/store/store';
 import { sendOrder } from '../../services/actions/send-order';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../../services/slices/auth-slice';
