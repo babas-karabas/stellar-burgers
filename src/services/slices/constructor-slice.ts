@@ -61,3 +61,4 @@ export const {
   clearConstructor
 } = constructorSlice.actions;
 export const { getConstructor } = constructorSlice.selectors;
+export const constructorReducer = constructorSlice.reducer;

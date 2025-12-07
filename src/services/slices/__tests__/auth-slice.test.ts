@@ -1,12 +1,5 @@
-import { TUser } from '../../utils/types';
-import { TUserState, setIsAuthChecked, authReducer } from './auth-slice';
-import {
-  loginUser,
-  getUserThunk,
-  registerUser,
-  updateUser,
-  logoutUser
-} from '../actions/user-actions';
+import { TUser } from '../../../utils/types';
+import { TUserState, setIsAuthChecked, authReducer } from '../auth-slice';
 
 describe('authSlice', function () {
   const initialState: TUserState = {
