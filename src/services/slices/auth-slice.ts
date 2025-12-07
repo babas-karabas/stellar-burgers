@@ -16,7 +16,7 @@ export interface TUserState {
   loginUserRequest: boolean;
 }
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
@@ -35,8 +35,9 @@ const hasPrefix = (action: { type: string }, prefix: string) =>
 export const isPendingAction = (prefix: string) => (action: { type: string }) =>
   hasPrefix(action, prefix) && isPending(action);
 
-export const isRejectedAction = (prefix: string) => (action: { type: string }) =>
-  hasPrefix(action, prefix) && isRejected(action);
+export const isRejectedAction =
+  (prefix: string) => (action: { type: string }) =>
+    hasPrefix(action, prefix) && isRejected(action);
 
 export const authSlice = createSlice({
   name: 'auth',

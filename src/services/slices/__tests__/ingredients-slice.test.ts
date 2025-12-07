@@ -1,13 +1,11 @@
-import { TIngredientsState, ingredientsReducer } from '../ingredients-slice';
+import {
+  TIngredientsState,
+  ingredientsReducer,
+  initialState
+} from '../ingredients-slice';
 import { loadIngredients } from '../../actions/load-ingredients';
 
 describe('ingredientsSlice', function () {
-  const initialState: TIngredientsState = {
-    data: [],
-    loading: false,
-    error: undefined
-  };
-
   const mockedIngredients = [
     {
       _id: '1',

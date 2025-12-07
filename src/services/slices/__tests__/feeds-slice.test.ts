@@ -1,4 +1,4 @@
-import { TFeedsState, feedsReducer } from '../feeds-slice';
+import { TFeedsState, feedsReducer, initialState } from '../feeds-slice';
 import {
   loadFeeds,
   loadOrders,
@@ -7,18 +7,6 @@ import {
 import { configureStore } from '@reduxjs/toolkit';
 
 describe('feedsSlice', function () {
-  const initialState: TFeedsState = {
-    feeds: {
-      orders: [],
-      total: 0,
-      totalToday: 0
-    },
-    loading: false,
-    error: null,
-    userOrders: [],
-    orderForModal: null
-  };
-
   const mockedOrders = [
     {
       _id: '6935be00a64177001b322988',

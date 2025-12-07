@@ -5,7 +5,8 @@ import {
   authSlice,
   authReducer,
   isPendingAction,
-  isRejectedAction
+  isRejectedAction,
+  initialState
 } from '../auth-slice';
 import {
   registerUser,
@@ -19,14 +20,6 @@ import { TRegisterData } from '../../../utils/burger-api';
 import { configureStore } from '@reduxjs/toolkit';
 
 describe('authSlice', function () {
-  const initialState: TUserState = {
-    isAuthChecked: false,
-    isAuthenticated: false,
-    user: null,
-    loginUserError: null,
-    loginUserRequest: false
-  };
-
   const userRegData: TRegisterData = {
     email: 'mail@mail.ru',
     name: 'Крузенштерн',

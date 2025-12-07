@@ -7,15 +7,11 @@ import {
   deleteIngredient,
   moveIngredient,
   clearConstructor,
-  constructorReducer
+  constructorReducer,
+  initialState
 } from '../constructor-slice';
 
 describe('constructorSlice', function () {
-  const initialState: TConstructorState = {
-    bun: null,
-    ingredients: []
-  };
-
   const mockedIngredients = [
     {
       _id: '1',

@@ -8,7 +8,7 @@ export interface TOrderState {
   error: string | undefined;
 }
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   data: null,
   loading: false,
   error: undefined

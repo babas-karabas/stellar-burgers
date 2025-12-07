@@ -1,13 +1,7 @@
-import { TOrderState, orderReducer } from '../order-slice';
+import { TOrderState, orderReducer, initialState } from '../order-slice';
 import { sendOrder } from '../../actions/send-order';
 
 describe('ingredientsSlice', function () {
-  const initialState: TOrderState = {
-    data: null,
-    loading: false,
-    error: undefined
-  };
-
   const mockedOrder = {
     _id: '6935be00a64177001b322988',
     ingredients: [

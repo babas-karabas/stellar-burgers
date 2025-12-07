@@ -15,7 +15,7 @@ export interface TFeedsState {
   orderForModal: TOrder | null;
 }
 
-const initialState: TFeedsState = {
+export const initialState: TFeedsState = {
   feeds: {
     orders: [],
     total: 0,
