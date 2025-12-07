@@ -9,7 +9,6 @@ import {
   clearConstructor,
   constructorReducer
 } from '../constructor-slice';
-import { nanoid } from '@reduxjs/toolkit';
 
 describe('constructorSlice', function () {
   const initialState: TConstructorState = {

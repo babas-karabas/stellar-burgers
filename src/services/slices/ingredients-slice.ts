@@ -6,13 +6,13 @@ import { loadIngredients } from '../actions/load-ingredients';
 export interface TIngredientsState {
   data: TIngredient[];
   loading: boolean;
-  error: string | null;
+  error: string | undefined;
 }
 
 const initialState: TIngredientsState = {
   data: [],
   loading: false,
-  error: null
+  error: undefined
 };
 
 export const ingredientsSlice = createSlice({
@@ -28,12 +28,12 @@ export const ingredientsSlice = createSlice({
 
       .addCase(loadIngredients.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = '';
       })
 
       .addCase(loadIngredients.rejected, (state, action) => {
         state.loading = false;
-        state.error = `Error of ${action.type}`;
+        state.error = action.error?.message;
       });
   },
   selectors: {
@@ -45,3 +45,5 @@ export const ingredientsSlice = createSlice({
 export const ingredientsActions = ingredientsSlice.actions;
 export const { getIngredients, getIngredientsStatus } =
   ingredientsSlice.selectors;
+
+export const ingredientsReducer = ingredientsSlice.reducer;

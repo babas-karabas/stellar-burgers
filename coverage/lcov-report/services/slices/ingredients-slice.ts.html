@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for services/slices/constructor-slice.ts</title>
+    <title>Code coverage report for services/slices/ingredients-slice.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">services/slices</a> constructor-slice.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">services/slices</a> ingredients-slice.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>64/64</span>
+                <span class='fraction'>49/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>4/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>1/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>64/64</span>
+                <span class='fraction'>49/49</span>
             </div>
         
             
@@ -112,22 +112,7 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -176,85 +161,55 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient } from './../../utils/types';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
+import { TIngredient } from './../../utils/types';
 &nbsp;
-export interface TConstructorState {
-  bun: TIngredient | null;
-  ingredients: TConstructorIngredient[];
+import { loadIngredients } from '../actions/load-ingredients';
+&nbsp;
+export interface TIngredientsState {
+  data: TIngredient[];
+  loading: boolean;
+  error: string | undefined;
 }
 &nbsp;
-const initialState: TConstructorState = {
-  bun: null,
-  ingredients: []
+const initialState: TIngredientsState = {
+  data: [],
+  loading: false,
+  error: undefined
 };
 &nbsp;
-export const constructorSlice = createSlice({
-  name: 'burgerConstructor',
+export const ingredientsSlice = createSlice({
+  name: 'ingredients',
   initialState,
-  reducers: {
-    setBun: (state, action) =&gt; {
-      state.bun = action.payload;
-    },
-    setOtherIngredients: {
-      reducer: (state, action: PayloadAction&lt;TConstructorIngredient&gt;) =&gt; {
-        state.ingredients.push(action.payload);
-      },
-      prepare: (ingredient: TIngredient) =&gt; {
-        const id = nanoid();
-        return { payload: { ...ingredient, id } };
-      }
-    },
-    clearConstructor: (state) =&gt; {
-      state.bun = null;
-      state.ingredients = [];
-    },
+  reducers: {},
+  extraReducers: (builder) =&gt; {
+    builder
+      .addCase(loadIngredients.fulfilled, (state, action) =&gt; {
+        state.data = action.payload;
+        state.loading = false;
+      })
 &nbsp;
-    deleteIngredient: (state, action: PayloadAction&lt;string&gt;) =&gt; {
-      state.ingredients = [
-        ...state.ingredients.filter(
-          (ingredient) =&gt; ingredient.id !== action.payload
-        )
-      ];
-    },
+      .addCase(loadIngredients.pending, (state) =&gt; {
+        state.loading = true;
+        state.error = '';
+      })
 &nbsp;
-    moveIngredient: (state, action) =&gt; {
-      state.ingredients.splice(
-        action.payload.to,
-        0,
-        state.ingredients.splice(action.payload.from, 1)[0]
-      );
-    }
+      .addCase(loadIngredients.rejected, (state, action) =&gt; {
+        state.loading = false;
+        state.error = action.error<span class="branch-0 cbranch-no" title="branch not covered" >?.m</span>essage;
+      });
   },
   selectors: {
-    getConstructor: <span class="fstat-no" title="function not covered" >(state) =&gt; state</span>
+    getIngredients: <span class="fstat-no" title="function not covered" >(state) =&gt; state.</span>data,
+    getIngredientsStatus: <span class="fstat-no" title="function not covered" >(state) =&gt; state.</span>loading
   }
 });
 &nbsp;
-export const {
-  setBun,
-  setOtherIngredients,
-  deleteIngredient,
-  moveIngredient,
-  clearConstructor
-} = constructorSlice.actions;
-export const { getConstructor } = constructorSlice.selectors;
-export const constructorReducer = constructorSlice.reducer;
+export const ingredientsActions = ingredientsSlice.actions;
+export const { getIngredients, getIngredientsStatus } =
+  ingredientsSlice.selectors;
+&nbsp;
+export const ingredientsReducer = ingredientsSlice.reducer;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

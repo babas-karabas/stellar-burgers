@@ -100,3 +100,5 @@ export const {
   getOrders,
   getOrderByNumber
 } = feedsSlice.selectors;
+
+export const feedsReducer = feedsSlice.reducer;

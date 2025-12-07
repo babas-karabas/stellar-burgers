@@ -32,10 +32,10 @@ const isPending = (action: { type: string }) => action.type.endsWith('pending');
 const hasPrefix = (action: { type: string }, prefix: string) =>
   action.type.startsWith(prefix);
 
-const isPendingAction = (prefix: string) => (action: { type: string }) =>
+export const isPendingAction = (prefix: string) => (action: { type: string }) =>
   hasPrefix(action, prefix) && isPending(action);
 
-const isRejectedAction = (prefix: string) => (action: { type: string }) =>
+export const isRejectedAction = (prefix: string) => (action: { type: string }) =>
   hasPrefix(action, prefix) && isRejected(action);
 
 export const authSlice = createSlice({
