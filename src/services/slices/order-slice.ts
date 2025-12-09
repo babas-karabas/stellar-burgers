@@ -8,7 +8,7 @@ export interface TOrderState {
   error: string | undefined;
 }
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   data: null,
   loading: false,
   error: undefined
@@ -31,6 +31,7 @@ export const orderSlice = createSlice({
 
       .addCase(sendOrder.pending, (state) => {
         state.loading = true;
+        state.error = '';
       })
 
       .addCase(sendOrder.rejected, (state, action) => {
@@ -48,3 +49,4 @@ export const orderSlice = createSlice({
 export const { getNewOrderName, getOrderStatus, getNewOrder } =
   orderSlice.selectors;
 export const { clearOrderData } = orderSlice.actions;
+export const orderReducer = orderSlice.reducer;

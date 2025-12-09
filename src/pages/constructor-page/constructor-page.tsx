@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from '../../services/store';
+import { useSelector, useDispatch } from '../../services/store/store';
 import { loadIngredients } from '../../services/actions/load-ingredients';
 import styles from './constructor-page.module.css';
 

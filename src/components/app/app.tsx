@@ -24,7 +24,7 @@ import { Modal, OrderInfo, IngredientDetails } from '@components';
 import { ProtectedRoute } from '@components';
 import { useEffect } from 'react';
 import { checkUserAuth } from '../../services/actions/user-actions';
-import { useDispatch } from '../../services/store';
+import { useDispatch } from '../../services/store/store';
 import { loadIngredients } from '../../services/actions/load-ingredients';
 
 const App = () => {

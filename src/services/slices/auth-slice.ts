@@ -8,7 +8,7 @@ import {
   logoutUser
 } from '../actions/user-actions';
 
-interface TUserState {
+export interface TUserState {
   isAuthChecked: boolean;
   isAuthenticated: boolean;
   user: TUser | null;
@@ -16,7 +16,7 @@ interface TUserState {
   loginUserRequest: boolean;
 }
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
@@ -32,11 +32,12 @@ const isPending = (action: { type: string }) => action.type.endsWith('pending');
 const hasPrefix = (action: { type: string }, prefix: string) =>
   action.type.startsWith(prefix);
 
-const isPendingAction = (prefix: string) => (action: { type: string }) =>
+export const isPendingAction = (prefix: string) => (action: { type: string }) =>
   hasPrefix(action, prefix) && isPending(action);
 
-const isRejectedAction = (prefix: string) => (action: { type: string }) =>
-  hasPrefix(action, prefix) && isRejected(action);
+export const isRejectedAction =
+  (prefix: string) => (action: { type: string }) =>
+    hasPrefix(action, prefix) && isRejected(action);
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -93,3 +94,4 @@ export const authSlice = createSlice({
 export const { setIsAuthChecked } = authSlice.actions;
 export const { getUser, getIsAuthChecked, getIsAuthenticated } =
   authSlice.selectors;
+export const authReducer = authSlice.reducer;
